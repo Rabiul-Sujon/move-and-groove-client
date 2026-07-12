@@ -1,38 +1,43 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ThemeProvider } from './context/ThemeContext';
+import Navbar from './components/common/Navbar';
+import Footer from './components/common/Footer';
+
+// Placeholder Home component
+function Home() {
+  return (
+    <div className="min-h-[70vh] flex flex-col items-center justify-center bg-pink-50 dark:bg-gray-900 px-4 transition-colors">
+      <h1 className="text-5xl font-bold text-pink-600 dark:text-pink-400 mb-4">
+        🕺 Move & Groove
+      </h1>
+      <p className="text-xl text-gray-700 dark:text-gray-300 text-center">
+        Find your rhythm. Book your dance class.
+      </p>
+      <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
+        API Status: ✅ Connected
+      </p>
+    </div>
+  );
+}
 
 function App() {
-  const [message, setMessage] = useState('Loading...');
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    console.log('🔄 API Call Started');
-    
-    const apiUrl = import.meta.env.VITE_API_URL;
-    console.log('📡 API URL:', apiUrl);
-    
-    axios.get(`${apiUrl}/health`)
-      .then(response => {
-        console.log('✅ API Response:', response.data);
-        setMessage(response.data.message);
-      })
-      .catch(err => {
-        console.error('❌ API Error:', err);
-        setError(err.message);
-      });
-  }, []);
-
   return (
-    <div className="bg-pink-500 text-white text-center p-8 min-h-screen">
-      <h1 className="text-4xl font-bold">Move & Groove</h1>
-      <p className="mt-4 text-xl">API Test Result:</p>
-      {error ? (
-        <p className="text-red-300 mt-2">❌ Error: {error}</p>
-      ) : (
-        <p className="text-white mt-2">✅ {message}</p>
-      )}
-      <p className="mt-4 text-sm opacity-75">Backend URL: {import.meta.env.VITE_API_URL}</p>
-    </div>
+    <ThemeProvider>
+      <BrowserRouter>
+        <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 transition-colors">
+          <Navbar />
+          <main className="flex-1">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/classes" element={<div className="p-8 text-center text-gray-700 dark:text-gray-300">Explore Classes (Coming soon)</div>} />
+              <Route path="/about" element={<div className="p-8 text-center text-gray-700 dark:text-gray-300">About Us (Coming soon)</div>} />
+              <Route path="/contact" element={<div className="p-8 text-center text-gray-700 dark:text-gray-300">Contact Us (Coming soon)</div>} />
+            </Routes>
+          </main>
+          <Footer />
+        </div>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 
