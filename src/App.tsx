@@ -10,6 +10,8 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Details from './pages/Details';
 import Listing from './pages/Listing';
+import AddClass from './pages/AddClass';
+import ManageClasses from './pages/ManageClasses';
 
 function App() {
   return (
@@ -28,6 +30,9 @@ function App() {
                 <Route path="/classes/:id" element={<Details />} />
                 
                 <Route path="/classes" element={<Listing />} />
+                <Route path="/classes/add" element={<AddClass />} />
+                <Route path="/classes/manage" element={<ManageClasses />} />
+                
               </Routes>
             </main>
             <Footer />
