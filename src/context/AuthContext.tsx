@@ -25,17 +25,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      // TODO: Verify token and get user data
-      // For now, we'll just check if token exists
-      const storedUser = localStorage.getItem('user');
-      if (storedUser) {
+  const token = localStorage.getItem('token');
+  if (token) {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser && storedUser !== 'undefined') {
+      try {
         setUser(JSON.parse(storedUser));
+      } catch (e) {
+        localStorage.removeItem('user');
       }
     }
-    setLoading(false);
-  }, []);
+  }
+  setLoading(false);
+}, []);
 
   const login = async (email: string, password: string) => {
     const response = await api.post('/auth/login', { email, password });

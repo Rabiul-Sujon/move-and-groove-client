@@ -3,21 +3,9 @@ import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider } from './context/AuthContext';
 import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
+import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
-
-function Home() {
-  return (
-    <div className="min-h-[70vh] flex flex-col items-center justify-center bg-pink-50 dark:bg-gray-900 px-4 transition-colors">
-      <h1 className="text-5xl font-bold text-pink-600 dark:text-pink-400 mb-4">
-        🕺 Move & Groove
-      </h1>
-      <p className="text-xl text-gray-700 dark:text-gray-300 text-center">
-        Find your rhythm. Book your dance class.
-      </p>
-    </div>
-  );
-}
 
 function App() {
   return (
