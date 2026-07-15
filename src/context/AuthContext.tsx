@@ -28,29 +28,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const [loading] = useState(false);
 
-  const login = async (email: string, password: string) => {
-    const response = await api.post('/auth/login', { email, password });
-    const { token, data } = response.data;
-    localStorage.setItem('token', token);
-    localStorage.setItem('user', JSON.stringify(data));
-    setUser(data);
-  };
+ const login = async (email: string, password: string) => {
+  const response = await api.post('/auth/login', { email, password });
+  const { token, ...userData } = response.data.data;
+  localStorage.setItem('token', token);
+  localStorage.setItem('user', JSON.stringify(userData));
+  setUser(userData);
+};
 
-  const register = async (name: string, email: string, password: string) => {
-    const response = await api.post('/auth/register', { name, email, password });
-    const { token, data } = response.data;
-    localStorage.setItem('token', token);
-    localStorage.setItem('user', JSON.stringify(data));
-    setUser(data);
-  };
+const register = async (name: string, email: string, password: string) => {
+  const response = await api.post('/auth/register', { name, email, password });
+  const { token, ...userData } = response.data.data;
+  localStorage.setItem('token', token);
+  localStorage.setItem('user', JSON.stringify(userData));
+  setUser(userData);
+};
 
   const demoLogin = async () => {
-    const response = await api.post('/auth/demo');
-    const { token, data } = response.data;
-    localStorage.setItem('token', token);
-    localStorage.setItem('user', JSON.stringify(data));
-    setUser(data);
-  };
+  const response = await api.post('/auth/demo');
+  const { token, ...userData } = response.data.data;
+  localStorage.setItem('token', token);
+  localStorage.setItem('user', JSON.stringify(userData));
+  setUser(userData);
+};
 
   const logout = () => {
     localStorage.removeItem('token');
