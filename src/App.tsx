@@ -8,6 +8,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import Details from './pages/Details';
+import Listing from './pages/Listing';
 
 function App() {
   return (
@@ -23,7 +25,9 @@ function App() {
                 <Route path="/register" element={<Register />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
-                <Route path="/classes" element={<div className="p-8 text-center">Explore Classes</div>} />
+                <Route path="/classes/:id" element={<Details />} />
+                
+                <Route path="/classes" element={<Listing />} />
               </Routes>
             </main>
             <Footer />
