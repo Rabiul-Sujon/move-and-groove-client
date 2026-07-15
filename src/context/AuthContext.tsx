@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { api } from '../services/api';
+import { AuthContext } from './AuthContextObject';
 
 interface User {
   id: string;
@@ -8,40 +9,28 @@ interface User {
   role: 'student' | 'instructor' | 'admin';
 }
 
-interface AuthContextType {
-  user: User | null;
-  loading: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string) => Promise<void>;
-  demoLogin: () => Promise<void>;
-  logout: () => void;
-  isAuthenticated: boolean;
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(() => {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
 
-  useEffect(() => {
-  const token = localStorage.getItem('token');
-  if (token) {
     const storedUser = localStorage.getItem('user');
     if (storedUser && storedUser !== 'undefined') {
       try {
-        setUser(JSON.parse(storedUser));
-      } catch (e) {
+        return JSON.parse(storedUser);
+      } catch {
         localStorage.removeItem('user');
+        return null;
       }
     }
-  }
-  setLoading(false);
-}, []);
+    return null;
+  });
+
+  const [loading] = useState(false);
 
   const login = async (email: string, password: string) => {
     const response = await api.post('/auth/login', { email, password });
-    const { token, data } = response.data.data;
+    const { token, data } = response.data;
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(data));
     setUser(data);
@@ -49,7 +38,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const register = async (name: string, email: string, password: string) => {
     const response = await api.post('/auth/register', { name, email, password });
-    const { token, data } = response.data.data;
+    const { token, data } = response.data;
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(data));
     setUser(data);
@@ -57,7 +46,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const demoLogin = async () => {
     const response = await api.post('/auth/demo');
-    const { token, data } = response.data.data;
+    const { token, data } = response.data;
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(data));
     setUser(data);
@@ -84,12 +73,4 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       {children}
     </AuthContext.Provider>
   );
-}
-
-export function useAuth() {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
 }
